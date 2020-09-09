@@ -1,20 +1,27 @@
-const add = (a = 0, b = 0) => {
-    if (typeof a !== 'number' || typeof b !== 'number') {
-        return 0;
+const axios = require('axios');
+
+class User {
+    constructor(userName, viewRepos = false) {
+        this.userName = userName;
+        this.canViewRepos = viewRepos;
     }
 
-    return a + b;
-};
-
-const sub = (a = 0, b = 0) => {
-    if (typeof a !== 'number' || typeof b !== 'number') {
-        return 0;
+    getUserId() {
+       return axios.get(`https://api.github.com/users/${this.userName}`)
+        .then(response => response.id);
     }
 
-    return a - b
-};
+    getUserRepo(repoIndex) {
+        if (this.canViewRepos) {
+            return axios.get(`https://api.github.com/users/${this.userName}/repos`)
+                .then(response => response[repoIndex])
+        }
+
+        return Promise.reject('Cannot view repos');
+    }
+
+}
 
 module.exports = {
-    add,
-    sub,
+    User,
 };
