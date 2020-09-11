@@ -8,13 +8,13 @@ class User {
 
     getUserId() {
        return axios.get(`https://api.github.com/users/${this.userName}`)
-        .then(response => response.id);
+        .then(response => response.data.id);
     }
 
     getUserRepo(repoIndex) {
         if (this.canViewRepos) {
             return axios.get(`https://api.github.com/users/${this.userName}/repos`)
-                .then(response => response[repoIndex])
+                .then(response => response.data[repoIndex])
         }
 
         return Promise.reject('Cannot view repos');
